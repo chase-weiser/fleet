@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-scale
+  namespace: default
+  labels:
+    usecase: fleet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      usecase: fleet
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        usecase: fleet
+    spec:
+      affinity: {}
+      containers:
+      - image: monachus/rancher-demo
+        imagePullPolicy: Always
+        name: container-0
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+
